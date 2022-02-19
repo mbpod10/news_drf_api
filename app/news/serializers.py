@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 
 from .models import Article
@@ -33,3 +34,10 @@ class ArticleSerializer(serializers.Serializer):
             'updated_at', instance.updated_at)
         instance.save()
         return instance
+
+    def validate(self, data):
+        """Check if title and description are the same"""
+        if data['title'] == data['description']:
+            raise serializers.ValidationError(
+                "Title and Description Must Be Different")
+        return data
