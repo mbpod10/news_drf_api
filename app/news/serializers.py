@@ -27,8 +27,8 @@ class ArticleSerializer(serializers.Serializer):
         instance.publication_date = validated_data.get(
             'publication_date', instance.publication_date)
         instance.active = validated_data.get('active', instance.active)
-        instance.create_at = validated_data.get(
-            'create_at', instance.create_at)
+        instance.created_at = validated_data.get(
+            'created_at', instance.created_at)
         instance.updated_at = validated_data.get(
             'updated_at', instance.updated_at)
         instance.save()
