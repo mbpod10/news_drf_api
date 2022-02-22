@@ -4,7 +4,6 @@ from news.models import Article
 from django.urls import reverse
 from rest_framework.test import APIClient
 from news.serializers import ArticleSerializer
-from datetime import datetime
 
 ARTICLES_URL = reverse('articles:list')
 
