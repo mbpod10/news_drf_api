@@ -2,7 +2,7 @@ from datetime import datetime
 from django.utils.timesince import timesince
 from rest_framework import serializers
 
-from .models import Article
+from .models import Article, Journalist
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -33,3 +33,10 @@ class ArticleSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "The title has to be at least 60 chars long")
         return value
+
+
+class JournalistSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Journalist
+        fields = "__all__"

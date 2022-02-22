@@ -1,5 +1,3 @@
-from news.models import Article
-
 seed_data = [
     {
         "author": "Ann M. Simmons",

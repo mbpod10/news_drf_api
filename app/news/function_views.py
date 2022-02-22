@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Article
-from .serializers import ArticleSerializer
+from .models import Article, Journalist
+from .serializers import ArticleSerializer, JournalistSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -40,3 +40,11 @@ def article_detail_view(request, pk=None):
     elif request.method == 'DELETE':
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'POST'])
+def journalist_list_view(request):
+    if request.method == 'GET':
+        journalists = Journalist.objects.all()
+        serializer = JournalistSerializer(journalists, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
