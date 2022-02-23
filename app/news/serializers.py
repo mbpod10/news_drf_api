@@ -11,24 +11,6 @@ class ArticlePostSerializer(serializers.ModelSerializer):
         model = Article
         fields = "__all__"
 
-
-class ArticleViewSerializer(serializers.ModelSerializer):
-
-    time_since_publication = serializers.SerializerMethodField()
-    author = serializers.StringRelatedField()
-
-    class Meta:
-        model = Article
-        fields = ("id", "author", "title", "description", "body",
-                  "location", "publication_date", "active",
-                  "created_at", "updated_at", "time_since_publication")
-
-    def get_time_since_publication(self, object):
-        publication_date = object.publication_date
-        now = datetime.now()
-        time_delta = timesince(publication_date, now)
-        return time_delta
-
     def validate(self, data):
         """Check if title and description are the same"""
         if data['title'] == data['description']:
@@ -43,9 +25,39 @@ class ArticleViewSerializer(serializers.ModelSerializer):
         return value
 
 
+class ArticleViewSerializer(serializers.ModelSerializer):
+
+    time_since_publication = serializers.SerializerMethodField()
+    author = serializers.SerializerMethodField()
+    # author = serializers.StringRelatedField()
+
+    class Meta:
+        model = Article
+        fields = ("id", "author", "title", "description", "body",
+                  "location", "publication_date", "active",
+                  "created_at", "updated_at", "time_since_publication",
+                  )
+
+    def get_time_since_publication(self, object):
+        publication_date = object.publication_date
+        now = datetime.now()
+        time_delta = timesince(publication_date, now)
+        return time_delta
+
+    def get_author(self, object):
+        author = object.author
+        data = {
+            "id": author.id,
+            "first_name": author.first_name,
+            "last_name": author.last_name,
+            "biography": author.biography,
+        }
+        return data
+
+
 class JournalistSerializer(serializers.ModelSerializer):
 
-    articles = ArticleViewSerializer(many=True, read_only=True)
+    articles = ArticlePostSerializer(many=True, read_only=True)
     article_count = serializers.SerializerMethodField()
 
     class Meta:
