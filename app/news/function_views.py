@@ -15,7 +15,6 @@ def article_list_view(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        # print(request.data)
         serializer = ArticlePostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -56,3 +55,23 @@ def journalist_list_view(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def journalist_detail_view(request, pk=None):
+    try:
+        article = Journalist.objects.get(pk=pk)
+    except ObjectDoesNotExist:
+        return Response({"error": "Journalist does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "GET":
+        serializer = JournalistSerializer(article)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'PUT':
+        serializer = JournalistSerializer(article, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
