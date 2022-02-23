@@ -5,9 +5,17 @@ from rest_framework import serializers
 from .models import Article, Journalist
 
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticlePostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Article
+        fields = "__all__"
+
+
+class ArticleViewSerializer(serializers.ModelSerializer):
 
     time_since_publication = serializers.SerializerMethodField()
+    author = serializers.StringRelatedField()
 
     class Meta:
         model = Article
@@ -31,12 +39,19 @@ class ArticleSerializer(serializers.ModelSerializer):
     def validate_title(self, value):
         if len(value) < 10:
             raise serializers.ValidationError(
-                "The title has to be at least 60 chars long")
+                "The title has to be at least 10 chars long")
         return value
 
 
 class JournalistSerializer(serializers.ModelSerializer):
 
+    articles = ArticleViewSerializer(many=True, read_only=True)
+    article_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Journalist
         fields = "__all__"
+
+    def get_article_count(self, object):
+        count = object.articles.count()
+        return count

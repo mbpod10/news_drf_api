@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from news.models import Article, Journalist
 from .data import article_data, journalist_data
+import random
 
 
 class Command(BaseCommand):
@@ -27,11 +28,12 @@ def create_journalists(data=journalist_data):
 
 
 def create_articles(article_data=article_data):
-    first_journalist = Journalist.objects.first()
-    first_id = first_journalist.id
+    first_id = Journalist.objects.first().id
+    last_id = Journalist.objects.last().id
+    range_id = list(range(first_id, last_id+1))
 
     for x in range(0, len(article_data)):
-        pk = first_id + x
+        pk = random.choice(range_id)
         author = Journalist.objects.get(pk=pk)
         data = article_data[x]
         article = Article.objects.create(author=author, **data)

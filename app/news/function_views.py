@@ -4,18 +4,19 @@ from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Article, Journalist
-from .serializers import ArticleSerializer, JournalistSerializer
+from .serializers import ArticlePostSerializer, JournalistSerializer, ArticleViewSerializer
 
 
 @api_view(['GET', 'POST'])
 def article_list_view(request):
     if request.method == 'GET':
         articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
+        serializer = ArticleViewSerializer(articles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
+        # print(request.data)
+        serializer = ArticlePostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -29,10 +30,10 @@ def article_detail_view(request, pk=None):
     except ObjectDoesNotExist:
         return Response({"error": "Article does not exist"}, status=status.HTTP_400_BAD_REQUEST)
     if request.method == "GET":
-        serializer = ArticleSerializer(article)
+        serializer = ArticleViewSerializer(article)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
-        serializer = ArticleSerializer(article, data=request.data)
+        serializer = ArticleViewSerializer(article, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -48,3 +49,10 @@ def journalist_list_view(request):
         journalists = Journalist.objects.all()
         serializer = JournalistSerializer(journalists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        serializer = JournalistSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

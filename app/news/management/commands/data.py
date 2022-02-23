@@ -23,6 +23,16 @@ article_data = [
         "location": "Beijing",
         "publication_date": "2022-02-17",
         "active": True
+    },
+    {
+
+        "title": "Canada Lawmakers Vote to Extend Emergency Powers Target",
+        "description": "Legislature approves extraordinary powers to ban protests deemed unlawful for 30-day period; Senate vote pending",
+        "body": "OTTAWA—Canada’s legislature on Monday approved extending the use of the special emergency powers invoked last week by Prime Minister Justin Trudeau to quell protests against Covid-19 mandates, which had paralyzed the capital and disrupted cross-border trade.\r\n\r\nA motion seeking approval of a cabinet order that invoked powers available under the country’s Emergencies Act for a full 30-day period passed Canada’s lower house of parliament by a 185-151 vote. Mr. Trudeau, who leads a minority Liberal government, received support from the country’s left-leaning New Democratic Party to extend the emergency powers. The Conservative Party and Bloc Quebecois opposed, arguing that the invocation of emergency powers threatened civil liberties.",
+        "location": "Canada",
+        "publication_date": "2022-02-22",
+        "active": True,
+
     }
 ]
 

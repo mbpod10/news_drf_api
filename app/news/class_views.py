@@ -1,5 +1,5 @@
 from .models import Article
-from .serializers import ArticleSerializer
+from .serializers import ArticleViewSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,11 +11,11 @@ class ArticleList(APIView):
 
     def get(self, request, format=None):
         articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
+        serializer = ArticleViewSerializer(articles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
-        serializer = ArticleSerializer(data=request.data)
+        serializer = ArticleViewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -32,12 +32,12 @@ class ArticleDetailView(APIView):
 
     def get(self, request, pk, format=None):
         article = self.get_object(pk=pk)
-        serializer = ArticleSerializer(article)
+        serializer = ArticleViewSerializer(article)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk, format=None):
         article = self.get_object(pk=pk)
-        serializer = ArticleSerializer(article, data=request.data)
+        serializer = ArticleViewSerializer(article, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
